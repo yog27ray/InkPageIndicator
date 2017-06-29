@@ -1,8 +1,9 @@
 package com.pixelcan.ipidemo;
 
+import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import com.pixelcan.inkpageindicator.InkPageIndicator;
 
@@ -24,5 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         mIndicator = (InkPageIndicator) findViewById(R.id.indicator);
         mIndicator.setViewPager(mPager);
+        mIndicator.setSelectedColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+        mIndicator.setUnSelectedColor(ContextCompat.getColor(MainActivity.this, android.R.color.holo_green_dark));
     }
 }

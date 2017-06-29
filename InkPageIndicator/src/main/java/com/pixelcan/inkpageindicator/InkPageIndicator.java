@@ -34,7 +34,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Interpolator;
 
@@ -93,20 +92,20 @@ public class InkPageIndicator extends View implements ViewPager.OnPageChangeList
     private boolean pageChanging;
 
     // drawing
-    private final Paint unselectedPaint;
-    private final Paint selectedPaint;
+    private Paint unselectedPaint;
+    private Paint selectedPaint;
     private Path combinedUnselectedPath;
-    private final Path unselectedDotPath;
-    private final Path unselectedDotLeftPath;
-    private final Path unselectedDotRightPath;
-    private final RectF rectF;
+    private Path unselectedDotPath;
+    private Path unselectedDotLeftPath;
+    private Path unselectedDotRightPath;
+    private RectF rectF;
 
     // animation
     private ValueAnimator moveAnimation;
     private AnimatorSet joiningAnimationSet;
     private PendingRetreatAnimator retreatAnimation;
     private PendingRevealAnimator[] revealAnimations;
-    private final Interpolator interpolator;
+    private Interpolator interpolator;
 
     // working values for beziers
     float endX1;
@@ -151,6 +150,10 @@ public class InkPageIndicator extends View implements ViewPager.OnPageChangeList
 
         a.recycle();
 
+        addOnAttachStateChangeListener(this);
+    }
+
+    private void updateUiColors() {
         unselectedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         unselectedPaint.setColor(unselectedColour);
         selectedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -163,8 +166,16 @@ public class InkPageIndicator extends View implements ViewPager.OnPageChangeList
         unselectedDotLeftPath = new Path();
         unselectedDotRightPath = new Path();
         rectF = new RectF();
+    }
 
-        addOnAttachStateChangeListener(this);
+    public void setSelectedColor(int color) {
+        selectedColour = color;
+        invalidate();
+    }
+
+    public void setUnSelectedColor(int color) {
+        unselectedColour = color;
+        invalidate();
     }
 
     public void setViewPager(ViewPager viewPager) {
@@ -323,6 +334,7 @@ public class InkPageIndicator extends View implements ViewPager.OnPageChangeList
 
     @Override
     protected void onDraw(Canvas canvas) {
+        updateUiColors();
         if (viewPager == null || pageCount == 0) return;
         drawUnselected(canvas);
         drawSelected(canvas);

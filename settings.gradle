@@ -1,1 +1,1 @@
-include ':app', ':InkPageIndicator'
+include ':app'
